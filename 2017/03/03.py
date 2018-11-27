@@ -27,3 +27,23 @@ else:
 print('Target distance:', target_distance)
 
 # Part 2
+
+def next_coords(x, y):
+	if x == y == 0: 
+		return (1, 0)
+	if y > -x and x > y:   	# go up
+		return (x, y+1)
+	if y > -x and y>= x: 	# go left
+		return (x-1, y)
+	if y <= -x and x < y:   # go down
+		return (x, y-1)
+	if y <= -x and x >= y: 	# go right
+		return (x+1, y)
+
+x, y = 0, 0
+vals = {(0, 0): 1}
+while vals[(x, y)] <= input:
+	x, y = next_coords(x, y)
+	vals[(x, y)] = sum(vals.get((x+i, y+j), 0) for i in [-1, 0, 1] for j in [-1, 0, 1])
+
+print('Result part 2:', vals[(x, y)])
