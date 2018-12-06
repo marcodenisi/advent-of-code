@@ -111,7 +111,7 @@ for row in range(size):
 	for column in range(size):
 		for index, point in enumerate(points):
 			matrix[row][column] += manhattan_distance([row, column], point)
-		if matrix[row][column] < 10000:
+		if matrix[row][column] < limit:
 			region_size += 1
 
 print('Part 2', region_size)
