@@ -3,14 +3,6 @@ defmodule AOC.Day4 do
   @fields ["ecl", "pid", "eyr", "hcl", "byr", "iyr", "hgt"]
   @eye_colors ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
-  defguard is_valid_byr?(val) when byte_size(val) == 4 and val >= "1920" and val <= "2002"
-  defguard is_valid_iyr?(val) when byte_size(val) == 4 and val >= "2010" and val <= "2020"
-  defguard is_valid_eyr?(val) when byte_size(val) == 4 and val >= "2020" and val <= "2030"
-  defguard is_valid_pid?(val) when byte_size(val) == 9
-  defguard is_valid_ecl?(val) when val in @eye_colors
-  defguard is_valid_hgt_cm?(val) when val >= "150" and val <= "193"
-  defguard is_valid_hgt_in?(val) when val >= "59" and val <= "76"
-
   def count_valid_passports(passports) do
     passports
     |> Enum.count(fn p -> count_valid_fields(p, 0) == length(@fields) end)
@@ -25,14 +17,14 @@ defmodule AOC.Day4 do
     end
   end
 
-  defp is_valid_field?("byr", val) when is_valid_byr?(val), do: true
-  defp is_valid_field?("iyr", val) when is_valid_iyr?(val), do: true
-  defp is_valid_field?("eyr", val) when is_valid_eyr?(val), do: true
-  defp is_valid_field?("hgt", <<digits::bytes-size(3), "cm">>) when is_valid_hgt_cm?(digits), do: true
-  defp is_valid_field?("hgt", <<digits::bytes-size(2), "in">>) when is_valid_hgt_in?(digits), do: true
+  defp is_valid_field?("byr", val), do: byte_size(val) == 4 and String.to_integer(val) >= 1920 and String.to_integer(val) <= 2002
+  defp is_valid_field?("iyr", val), do: byte_size(val) == 4 and String.to_integer(val) >= 2010 and String.to_integer(val) <= 2020
+  defp is_valid_field?("eyr", val), do: byte_size(val) == 4 and String.to_integer(val) >= 2020 and String.to_integer(val) <= 2030
+  defp is_valid_field?("hgt", <<digits::bytes-size(3), "cm">>), do: String.to_integer(digits) >= 150 and String.to_integer(digits) <= 193
+  defp is_valid_field?("hgt", <<digits::bytes-size(2), "in">>), do: String.to_integer(digits) >= 59 and String.to_integer(digits) <= 76
   defp is_valid_field?("hcl", <<"#", color::bytes-size(6)>>), do: String.match?(color, ~r/^([0-9]|[a-f]){6}$/)
-  defp is_valid_field?("ecl", val) when is_valid_ecl?(val), do: true
-  defp is_valid_field?("pid", val) when is_valid_pid?(val), do: true
+  defp is_valid_field?("ecl", val), do: val in @eye_colors
+  defp is_valid_field?("pid", val), do: byte_size(val) == 9
   defp is_valid_field?(_, _), do: false
 
 end
