@@ -13,15 +13,15 @@ defmodule AOC.Day4 do
 
   def count_valid_passports(passports) do
     passports
-    |> Enum.count(fn p -> count_valid_fields?(p, 0) == length(@fields) end)
+    |> Enum.count(fn p -> count_valid_fields(p, 0) == length(@fields) end)
   end
 
-  defp count_valid_fields?([], acc), do: acc
-  defp count_valid_fields?(["cid" <> ":" <> _ | tl], acc), do: count_valid_fields?(tl, acc)
-  defp count_valid_fields?([<<field::bytes-size(3)>> <> ":" <> val | tl], acc) do
+  defp count_valid_fields([], acc), do: acc
+  defp count_valid_fields(["cid" <> ":" <> _ | tl], acc), do: count_valid_fields(tl, acc)
+  defp count_valid_fields([<<field::bytes-size(3)>> <> ":" <> val | tl], acc) do
     case is_valid_field?(field, val) do
-      true -> count_valid_fields?(tl, acc + 1)
-      false -> count_valid_fields?([], acc)
+      true -> count_valid_fields(tl, acc + 1)
+      false -> count_valid_fields([], acc)
     end
   end
 
