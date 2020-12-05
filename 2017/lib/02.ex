@@ -15,7 +15,6 @@ defmodule AOC.Day2 do
   end
 
   defp line_evenly_divisible(line) do
-    line = line |> Enum.sort |> Enum.reverse
     [hd] = for x <- line, y <- line, x != y and rem(x, y) == 0, do: trunc(x/y)
     hd
   end
