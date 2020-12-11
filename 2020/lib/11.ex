@@ -99,4 +99,97 @@ defmodule AOC.Day11 do
     end |> Enum.sum
   end
 
+  def occupied_2(seats) do
+    new_state = do_calculate_2(seats)
+    if are_equal?(seats, new_state) do
+      count_occupied(new_state)
+    else
+      occupied_2(new_state)
+    end
+  end
+
+  defp do_calculate_2(old_state) do
+    for row <- 0..length(old_state) - 1 do
+      r = Enum.at(old_state, row)
+      for col <- 0..length(r) - 1 do
+        seat = Enum.at(r, col)
+        case seat do
+          "L" -> if adjacent_2(old_state, row, col, fn seat -> seat != "#" end) == 8, do: "#", else: "L"
+          "#" -> if adjacent_2(old_state, row, col, fn seat -> seat == "#" end) >= 5, do: "L", else: "#"
+          _ -> seat
+        end
+      end
+    end
+  end
+
+  defp adjacent_2(state, row_index, col_index, fun) do
+    current_row = Enum.at(state, row_index)
+
+    down = state
+    |> Enum.drop(row_index + 1)
+    |> Enum.map(&Enum.at(&1, col_index))
+    |> get_next
+
+    up = state
+    |> Enum.take(row_index)
+    |> Enum.filter(&not_empty?/1)
+    |> Enum.reverse
+    |> Enum.map(&Enum.at(&1, col_index))
+    |> get_next
+
+    right = current_row |> Enum.drop(col_index + 1) |> get_next
+
+    left = current_row |> Enum.take(col_index) |> Enum.reverse |> get_next
+
+    right_down = state
+    |> Enum.drop(row_index + 1)
+    |> Enum.map(&Enum.drop(&1, col_index + 1))
+    |> Enum.filter(&not_empty?/1)
+    |> get_next_diagonal
+
+    left_down = state
+    |> Enum.drop(row_index + 1)
+    |> Enum.map(&Enum.take(&1, col_index))
+    |> Enum.filter(&not_empty?/1)
+    |> Enum.map(&Enum.reverse/1)
+    |> get_next_diagonal
+
+    right_up = state
+    |> Enum.take(row_index)
+    |> Enum.map(&Enum.drop(&1, col_index + 1))
+    |> Enum.reverse
+    |> Enum.filter(&not_empty?/1)
+    |> get_next_diagonal
+
+    left_up = state
+    |> Enum.take(row_index)
+    |> Enum.reverse
+    |> Enum.map(&Enum.take(&1, col_index))
+    |> Enum.map(&Enum.reverse/1)
+    |> Enum.filter(&not_empty?/1)
+    |> get_next_diagonal
+
+    [
+      down,
+      up,
+      right,
+      left,
+      right_down,
+      right_up,
+      left_down,
+      left_up
+    ] |> Enum.count(fun)
+
+  end
+
+  defp not_empty?([]), do: false
+  defp not_empty?(_), do: true
+
+  defp get_next([]), do: "L"
+  defp get_next(["." | tl]), do: get_next(tl)
+  defp get_next([seat | _]), do: seat
+
+  defp get_next_diagonal([]), do: "L"
+  defp get_next_diagonal([["." | _] | rest]), do: rest |> Enum.map(&Enum.drop(&1, 1)) |> Enum.filter(&not_empty?/1) |> get_next_diagonal
+  defp get_next_diagonal([[seat | _] | _]), do: seat
 end
