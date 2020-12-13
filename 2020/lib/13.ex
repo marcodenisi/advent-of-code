@@ -9,21 +9,27 @@ defmodule AOC.Day13 do
     bus * (time - departure)
   end
 
-  def earliest_part_2([hd | _] = buses, start) do
-    case count(buses, start, start) do
-      :error -> earliest_part_2(buses, start + String.to_integer(hd))
-      n -> n
-    end
+  def find_first_time(buses) do
+    bigN = buses
+    |> Enum.map(&(elem(&1, 0)))
+    |> Enum.reduce(1, &Kernel.*/2)
+
+    x = buses
+    |> Enum.map(fn {n, a} ->
+      ni = Integer.floor_div(bigN, n)
+      xi = find_xi(ni, n, 1)
+      ni * xi * a
+    end)
+    |> Enum.sum()
+    |> Kernel.rem(bigN)
+
+    bigN - x
   end
 
-  defp count([], start, _), do: start
-  defp count(["x" | buses], start, target), do: count(buses, start, target + 1)
-  defp count([current_bus | buses], start, target) do
-    current_bus = String.to_integer(current_bus)
-    if rem(target, current_bus) == 0 do
-      count(buses, start, target + 1)
-    else
-      :error
+  def find_xi(ni, n, x) do
+    case rem(x * ni, n) do
+      1 -> x
+      _ -> find_xi(ni, n, x + 1)
     end
   end
 

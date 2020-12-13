@@ -7,16 +7,23 @@ defmodule AOC.Day13Test do
       "939
       7,13,x,x,59,x,31,19"
     assert AOC.Day13.earliest(parse(content)) == 295
-    assert AOC.Day13.earliest_part_2(parse_bus(content), 0) == 1068781
+
+    buses = parse_bus(content)
+    |> Enum.with_index
+    |> Enum.filter(fn {el, _} -> el != "x" end)
+    |> Enum.map(fn {el, idx} -> {String.to_integer(el), idx} end)
+    assert AOC.Day13.find_first_time(buses) == 1068781
   end
 
   test "day 13 - real input" do
     {:ok, content} = File.read("resources/13.txt")
     assert AOC.Day13.earliest(parse(content)) == 4808
 
-    [first | _] = parse_bus(content)
-    start = trunc(100000000000000 / String.to_integer(first)) * String.to_integer(first)
-    assert AOC.Day13.earliest_part_2(parse_bus(content), start) == 1068781
+    buses = parse_bus(content)
+    |> Enum.with_index
+    |> Enum.filter(fn {el, _} -> el != "x" end)
+    |> Enum.map(fn {el, idx} -> {String.to_integer(el), idx} end)
+    assert AOC.Day13.find_first_time(buses) == 741745043105674
   end
 
   defp parse(content) do
