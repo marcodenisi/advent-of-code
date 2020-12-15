@@ -2,7 +2,6 @@ defmodule AOC.Day15 do
 
   def count(starting_numbers) do
     turns_played = length(starting_numbers)
-    #last_num = Enum.at(starting_numbers, turns_played)
     acc = starting_numbers
     |> Enum.with_index(1)
     |> Enum.map(fn {el, idx} -> {el, [idx]} end)
@@ -10,7 +9,7 @@ defmodule AOC.Day15 do
     do_count(turns_played, "-1", acc)
   end
 
-  defp do_count(turns_played, last_num, _) when turns_played == 30000000, do: last_num
+  defp do_count(turns_played, last_num, _) when turns_played == 2020, do: last_num
   defp do_count(turns_played, last_num, acc) do
     current_turn = turns_played + 1
     next = case Map.get(acc, last_num) do
@@ -26,8 +25,6 @@ defmodule AOC.Day15 do
         [_, latest] -> [latest, current_turn]
       end
     )
-    #IO.puts("next: " <> next)
-    #IO.inspect acc
     do_count(current_turn, next, acc)
   end
 
