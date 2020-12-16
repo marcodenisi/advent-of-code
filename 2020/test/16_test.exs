@@ -19,7 +19,7 @@ defmodule AOC.Day16Test do
 
     rows = parse(content)
     rules = get_rules(rows)
-    [_your_ticket | nearby_tickets] = get_tickets(rows)
+    [your_ticket | nearby_tickets] = get_tickets(rows)
 
     assert AOC.Day16.part_1(rules, nearby_tickets) == 71
   end
@@ -29,9 +29,10 @@ defmodule AOC.Day16Test do
 
     rows = parse(content)
     rules = get_rules(rows)
-    [_your_ticket | nearby_tickets] = get_tickets(rows)
+    [your_ticket | nearby_tickets] = get_tickets(rows)
 
     assert AOC.Day16.part_1(rules, nearby_tickets) == 20013
+    assert AOC.Day16.part_2(rules, [your_ticket | nearby_tickets]) == 5977293343129
   end
 
   defp parse(content) do
