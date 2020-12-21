@@ -7,7 +7,6 @@ defmodule AOC.Day20Test do
 
     tiles = parse(content)
     assert AOC.Day20.part_1(tiles) == 20899048083289
-    assert AOC.Day20.part_2(tiles) == 7901522557967
   end
 
   test "day 20" do

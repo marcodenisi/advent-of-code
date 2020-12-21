@@ -45,8 +45,4 @@ defmodule AOC.Day20 do
     Map.put(acc, id, adjacents)
   end
 
-  def part_2(tiles) do
-  
-  end
-
 end
