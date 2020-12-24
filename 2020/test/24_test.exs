@@ -5,11 +5,13 @@ defmodule AOC.Day24Test do
   test "day 24 - test input" do
     {:ok, input} = File.read("resources/24_test.txt")
     assert AOC.Day24.part_1(parse(input)) == 10
+    assert AOC.Day24.part_2(parse(input)) == 2208
   end
 
   test "day 24" do
     {:ok, input} = File.read("resources/24.txt")
     assert AOC.Day24.part_1(parse(input)) == 293
+    assert AOC.Day24.part_2(parse(input)) == 3967
   end
 
   defp parse(input) do
